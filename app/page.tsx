@@ -1,4 +1,8 @@
+"use client";
 import React, { useRef, useEffect } from 'react';
+// ...existing code...
+
+
 
 export default function HomePage() {
   const bannerRef = useRef<HTMLDivElement>(null);
