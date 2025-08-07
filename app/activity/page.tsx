@@ -1,5 +1,5 @@
+"use client";
 import React, { useEffect } from 'react';
-
 export default function ActivityPage() {
   useEffect(() => {
     const cards = document.querySelectorAll('.activity-card');
