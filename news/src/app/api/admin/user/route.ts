@@ -9,7 +9,7 @@ export async function GET() {
   return NextResponse.json(users);
 }
 
-export async function DELETE({ request }: { request: Request }) {
+export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
   if (!id) return NextResponse.json({ success: false, error: '缺少id' }, { status: 400 });

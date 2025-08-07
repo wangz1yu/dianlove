@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import { adminAuth } from '@/middleware/adminAuth';
 import { logAction } from '@/lib/logger';
 
-export async function GET({ request }: { request: Request }) {
+export async function GET(request: Request) {
   const authResult = adminAuth(request as any);
   if (authResult) return authResult;
   const client = await clientPromise;
@@ -12,7 +12,8 @@ export async function GET({ request }: { request: Request }) {
   const comments = await db.collection('comments').find({}).toArray();
   return NextResponse.json(comments);
 }
-export async function DELETE({ request }: { request: Request }) {
+
+export async function DELETE(request: Request) {
   const authResult = adminAuth(request as any);
   if (authResult) return authResult;
   const { searchParams } = new URL(request.url);

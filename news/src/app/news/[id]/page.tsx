@@ -1,10 +1,14 @@
 import { notFound } from "next/navigation";
 import Comments from "./comments";
 
-export default function NewsDetail({ params }: { params: { id: string } }) {
-  // 后续可对接 API 获取新闻详情
-  const newsId = params.id;
+export default async function NewsDetail({ 
+  params 
+}: { 
+  params: Promise<{ id: string }> 
+}) {
+  const { id: newsId } = await params;
   if (!newsId) return notFound();
+  
   return (
     <main className="container mx-auto py-12 px-6">
       <h1 className="text-3xl font-bold mb-6">新闻详情 - {newsId}</h1>
