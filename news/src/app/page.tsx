@@ -4,6 +4,7 @@ export default function HomePage() {
   const bannerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let step = 0;
+    // Banner 渐变动画
     const interval = setInterval(() => {
       step += 1;
       const deg = 90 + Math.sin(step / 30) * 30;
@@ -22,12 +23,29 @@ export default function HomePage() {
         (card as HTMLDivElement).style.transform = 'translateY(0)';
       }, 300 + idx * 200);
     });
-    return () => clearInterval(interval);
+    // 顶部导航栏吸顶渐变动画
+    const nav = document.querySelector('.main-nav') as HTMLElement;
+    const onScroll = () => {
+      if (nav) {
+        if (window.scrollY > 10) {
+          nav.style.background = 'linear-gradient(90deg,#2e7cf6,#00e0ff)';
+          nav.style.boxShadow = '0 4px 16px #b3d8ff';
+        } else {
+          nav.style.background = '#fff';
+          nav.style.boxShadow = '0 2px 8px #eee';
+        }
+      }
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
     return (
       <main style={{ fontFamily: 'PingFang SC, Microsoft YaHei, Arial, sans-serif', background: '#f6f8fa', minHeight: '100vh' }}>
         {/* 顶部导航栏 */}
-        <header style={{ background: '#fff', boxShadow: '0 2px 8px #eee', padding: '16px 0' }}>
+        <header className="main-nav" style={{ background: '#fff', boxShadow: '0 2px 8px #eee', padding: '16px 0', position: 'sticky', top: 0, zIndex: 100 }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ fontWeight: 'bold', fontSize: 28, color: '#2e7cf6' }}>节薪云</div>
             <nav>
@@ -57,12 +75,33 @@ export default function HomePage() {
             boxShadow: '0 2px 8px #eee',
             textDecoration: 'none',
             marginTop: 16,
+            position: 'relative',
+            overflow: 'hidden',
             transition: 'box-shadow 0.2s, background 0.2s, color 0.2s',
           }}
           onMouseEnter={e => {
             (e.currentTarget as HTMLAnchorElement).style.background = '#2e7cf6';
             (e.currentTarget as HTMLAnchorElement).style.color = '#fff';
             (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 8px 24px #b3d8ff';
+            // 波纹动画
+            const ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.left = '50%';
+            ripple.style.top = '50%';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.width = ripple.style.height = '0px';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(255,255,255,0.3)';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.transition = 'width 0.4s, height 0.4s, opacity 0.6s';
+            (e.currentTarget as HTMLAnchorElement).appendChild(ripple);
+            setTimeout(() => {
+              ripple.style.width = ripple.style.height = '120px';
+              ripple.style.opacity = '0';
+            }, 10);
+            setTimeout(() => {
+              ripple.remove();
+            }, 500);
           }}
           onMouseLeave={e => {
             (e.currentTarget as HTMLAnchorElement).style.background = '#fff';
@@ -100,8 +139,8 @@ export default function HomePage() {
               opacity: 1,
             }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-8px) scale(1.03)';
-              (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 24px #b3d8ff';
+              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-16px) scale(1.06)';
+              (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 32px #b3d8ff';
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLDivElement).style.transform = '';
@@ -117,7 +156,7 @@ export default function HomePage() {
 
         {/* 页脚 */}
         <footer style={{ background: '#222', color: '#fff', textAlign: 'center', padding: '32px 0', marginTop: 64 }}>
-          <div>© 2025 节薪云 版权所有</div>
+          <div>© 2025 节薪云 版权所有 | <a href="https://beian.miit.gov.cn/" style={{ color: '#b3d8ff', textDecoration: 'underline' }} target="_blank" rel="noopener">皖ICP备20240404号</a></div>
         </footer>
       </main>
     );
